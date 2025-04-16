@@ -171,10 +171,31 @@ class MCPClient:
 
             # Initial Claude API call via Bedrock
             print("Sending request to Claude via AWS Bedrock...")
+            
+            # First try without tools to see if it's a simple conversational query
             bedrock_response = self._invoke_bedrock_claude(
                 messages=messages,
-                tools=available_tools
+                tools=None  # Don't include tools on the first try
             )
+            
+            # Check if the model response indicates it wants to use tools
+            response_text = ""
+            for content in bedrock_response.get("content", []):
+                if content.get("type") == 'text':
+                    response_text += content.get("text", "")
+            
+            # If the response suggests it needs tools, try again with tools
+            tool_indicators = ["I need to", "I should", "I'll need to", "let me", "let's use", 
+                              "I can help you with that", "I'd need to use", "I don't have access to"]
+            needs_tools = any(indicator.lower() in response_text.lower() for indicator in tool_indicators)
+            
+            if needs_tools and available_tools:
+                print("Response suggests tools might be needed. Retrying with tools...")
+                # Retry with tools
+                bedrock_response = self._invoke_bedrock_claude(
+                    messages=messages,
+                    tools=available_tools
+                )
             
             # Process response and handle tool calls
             tool_results = []
