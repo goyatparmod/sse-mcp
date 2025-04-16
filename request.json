@@ -1,0 +1,20 @@
+{                                                                                "anthropic_version": "bedrock-2023-05-31",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Explain quantum computing in simple terms."
+      }
+    ],
+    "max_tokens": 300,
+    "temperature": 0.7
+  }
+
+
+//   aws bedrock-runtime invoke-model \
+//   --model-id us.anthropic.claude-3-7-sonnet-20250219-v1:0 \
+//   --body "$(openssl base64 -in request.json)" \
+//   --content-type application/json \
+//   --accept application/json \
+//   --region us-east-1 \
+//  --output text outfile.json
+// how is weather 33.7537, -84.3863
