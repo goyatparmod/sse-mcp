@@ -25,4 +25,4 @@ ENV ANTHROPIC_API_KEY=your_api_key_here
 EXPOSE 8080
 
 # Default command to run the server
-CMD ["uv", "run", "weather.py"]
+CMD ["uv", "run", "location_manager.py"]
